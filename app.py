@@ -1,367 +1,3 @@
-# import streamlit as st
-# import tensorflow as tf
-# import numpy as np
-# import os
-# from PIL import Image
-
-# # 1. Page Configuration & Styling
-# st.set_page_config(page_title="Dog vs Cat AI Detector", page_icon="🐶🐱", layout="centered")
-
-# st.markdown("""
-#     <style>
-#     .main-title {
-#         text-align: center;
-#         color: #FF4B4B;
-#         font-size: 2.5rem;
-#         font-weight: 700;
-#     }
-#     .sub-text {
-#         text-align: center;
-#         color: #555555;
-#         font-size: 1.1rem;
-#         margin-bottom: 30px;
-#     }
-#     </style>
-# """, unsafe_allow_html=True)
-
-# st.markdown('<p class="main-title">🐶🐱 Dog vs Cat AI Classifier</p>', unsafe_allow_html=True)
-# st.markdown('<p class="sub-text">Powered by Deep Learning & Transfer Learning (MobileNetV2)</p>', unsafe_allow_html=True)
-
-# # 2. Load the trained model (Cached)
-# @st.cache_resource
-# def load_model():
-#     return tf.keras.models.load_model('dog_cat_model.keras')
-
-# with st.spinner("🔄 Loading AI Model... Please wait..."):
-#     model = load_model()
-
-# # 3. Sidebar Navigation
-# st.sidebar.header("⚙️ Settings & Options")
-# option = st.sidebar.radio("Choose Input Mode:", ("📤 Upload an Image", "📸 Take a Live Photo"))
-
-# image_to_analyze = None
-
-# if option == "📤 Upload an Image":
-#     st.subheader("Upload a Picture")
-#     uploaded_file = st.file_uploader("Choose a JPG, JPEG or PNG file...", type=["jpg", "jpeg", "png"])
-#     if uploaded_file is not None:
-#         try:
-#             image_to_analyze = Image.open(uploaded_file)
-#         except Exception as e:
-#             st.error("⚠️ Error reading the image from phone. Please try a different image.")
-
-# elif option == "📸 Take a Live Photo":
-#     st.subheader("Live Camera Capture")
-#     camera_photo = st.camera_input("Smile! Take a picture of a dog or cat")
-#     if camera_photo is not None:
-#         try:
-#             image_to_analyze = Image.open(camera_photo)
-#         except Exception as e:
-#             st.error("⚠️ Error reading camera photo.")
-
-# # 4. Display & Analyze
-# if image_to_analyze is not None:
-#     col1, col2 = st.columns(2)
-    
-#     with col1:
-#         st.image(image_to_analyze, caption='Selected Image', use_container_width=True)
-        
-#     with col2:
-#         st.info("🧠 AI Analysis in progress...")
-        
-#         # Safe preprocessing for both mobile and desktop
-#         temp_path = "temp_image.jpg"
-#         rgb_image = image_to_analyze.convert('RGB')
-#         rgb_image.save(temp_path, "JPEG")
-
-#         img = tf.keras.utils.load_img(temp_path, target_size=(150, 150))
-#         img_array = tf.keras.utils.img_to_array(img)
-#         img_array = tf.expand_dims(img_array, 0)
-
-#         # Make Prediction
-#         predictions = model.predict(img_array)
-#         score = tf.nn.softmax(predictions[0])
-
-#         class_names = ['Cat 🐱', 'Dog 🐶']
-#         predicted_class = class_names[np.argmax(score)]
-#         confidence = 100 * np.max(score)
-
-#         st.markdown("---")
-#         if "Cat" in predicted_class:
-#             st.success(f"### Prediction: **{predicted_class}**")
-#         else:
-#             st.warning(f"### Prediction: **{predicted_class}**")
-            
-#         st.metric(label="Confidence Level", value=f"{confidence:.2f}%")
-
-#         if os.path.exists(temp_path):
-#             os.remove(temp_path)
-# else:
-#     st.markdown("---")
-#     st.warning("👉 Please upload an image or take a photo from the sidebar to get started!")
-
-
-
-
-
-
-
-
-# import streamlit as st
-# import tensorflow as tf
-# import numpy as np
-# from PIL import Image
-
-# # 1. Page Configuration & Styling
-# st.set_page_config(
-#     page_title="Dog vs Cat AI Detector",
-#     page_icon="🐶🐱",
-#     layout="centered"
-# )
-
-# st.markdown("""
-#     <style>
-#     .main-title {
-#         text-align: center;
-#         color: #FF4B4B;
-#         font-size: 2.5rem;
-#         font-weight: 700;
-#     }
-
-#     .sub-text {
-#         text-align: center;
-#         color: #555555;
-#         font-size: 1.1rem;
-#         margin-bottom: 30px;
-#     }
-#     </style>
-# """, unsafe_allow_html=True)
-
-# st.markdown(
-#     '<p class="main-title">🐶🐱 Dog vs Cat AI Classifier</p>',
-#     unsafe_allow_html=True
-# )
-
-# st.markdown(
-#     '<p class="sub-text">Powered by Deep Learning & Transfer Learning (MobileNetV2)</p>',
-#     unsafe_allow_html=True
-# )
-
-
-# # 2. Load the trained model (Cached)
-# @st.cache_resource
-# def load_model():
-#     return tf.keras.models.load_model("dog_cat_model.keras")
-
-
-# with st.spinner("🔄 Loading AI Model... Please wait..."):
-#     model = load_model()
-
-
-# # 3. Sidebar Navigation
-# st.sidebar.header("⚙️ Settings & Options")
-
-# option = st.sidebar.radio(
-#     "Choose Input Mode:",
-#     ("📤 Upload an Image", "📸 Take a Live Photo")
-# )
-
-# image_to_analyze = None
-
-
-# # =========================================================
-# # Upload Image
-# # =========================================================
-
-# if option == "📤 Upload an Image":
-
-#     st.subheader("📤 Upload a Picture")
-
-#     uploaded_file = st.file_uploader(
-#         "Choose a JPG, JPEG or PNG file...",
-#         type=["jpg", "jpeg", "png"],
-#         accept_multiple_files=False,
-#         key="image_upload"
-#     )
-
-#     if uploaded_file is not None:
-
-#         try:
-#             # Read uploaded image
-#             image_to_analyze = Image.open(uploaded_file)
-
-#             # Fully load the image
-#             image_to_analyze.load()
-
-#             # Convert image to RGB
-#             image_to_analyze = image_to_analyze.convert("RGB")
-
-#         except Exception as e:
-
-#             st.error(
-#                 f"⚠️ Error reading the uploaded image: {e}"
-#             )
-
-
-# # =========================================================
-# # Live Camera
-# # =========================================================
-
-# elif option == "📸 Take a Live Photo":
-
-#     st.subheader("📸 Live Camera Capture")
-
-#     camera_photo = st.camera_input(
-#         "Smile! Take a picture of a dog or cat"
-#     )
-
-#     if camera_photo is not None:
-
-#         try:
-#             # Read camera image
-#             image_to_analyze = Image.open(camera_photo)
-
-#             # Fully load the image
-#             image_to_analyze.load()
-
-#             # Convert to RGB
-#             image_to_analyze = image_to_analyze.convert("RGB")
-
-#         except Exception as e:
-
-#             st.error(
-#                 f"⚠️ Error reading camera photo: {e}"
-#             )
-
-
-# # =========================================================
-# # 4. Display & Analyze
-# # =========================================================
-
-# if image_to_analyze is not None:
-
-#     st.markdown("---")
-
-#     col1, col2 = st.columns(2)
-
-#     # -----------------------------------------------------
-#     # Display Image
-#     # -----------------------------------------------------
-
-#     with col1:
-
-#         st.image(
-#             image_to_analyze,
-#             caption="Selected Image",
-#             use_container_width=True
-#         )
-
-
-#     # -----------------------------------------------------
-#     # AI Analysis
-#     # -----------------------------------------------------
-
-#     with col2:
-
-#         st.info("🧠 AI Analysis in progress...")
-
-#         try:
-
-#             # ---------------------------------------------
-#             # Image Preprocessing
-#             # ---------------------------------------------
-
-#             img = image_to_analyze.resize((150, 150))
-
-#             img_array = tf.keras.utils.img_to_array(img)
-
-#             # Add batch dimension
-#             img_array = tf.expand_dims(img_array, 0)
-
-
-#             # ---------------------------------------------
-#             # Make Prediction
-#             # ---------------------------------------------
-
-#             predictions = model.predict(
-#                 img_array,
-#                 verbose=0
-#             )
-
-#             score = tf.nn.softmax(predictions[0])
-
-
-#             # ---------------------------------------------
-#             # Class Names
-#             # ---------------------------------------------
-
-#             class_names = [
-#                 "Cat 🐱",
-#                 "Dog 🐶"
-#             ]
-
-#             predicted_class = class_names[
-#                 np.argmax(score)
-#             ]
-
-#             confidence = (
-#                 100 * np.max(score)
-#             )
-
-
-#             # ---------------------------------------------
-#             # Display Result
-#             # ---------------------------------------------
-
-#             st.markdown("---")
-
-#             if "Cat" in predicted_class:
-
-#                 st.success(
-#                     f"### Prediction: **{predicted_class}**"
-#                 )
-
-#             else:
-
-#                 st.warning(
-#                     f"### Prediction: **{predicted_class}**"
-#                 )
-
-
-#             st.metric(
-#                 label="Confidence Level",
-#                 value=f"{confidence:.2f}%"
-#             )
-
-
-#         except Exception as e:
-
-#             st.error(
-#                 f"❌ Error during prediction: {e}"
-#             )
-
-
-# # =========================================================
-# # No Image Selected
-# # =========================================================
-
-# else:
-
-#     st.markdown("---")
-
-#     st.warning(
-#         "👉 Please upload an image or take a photo "
-#         "from the sidebar to get started!"
-#     )
-
-
-
-
-
-
-
-
-
 import streamlit as st
 import tensorflow as tf
 import numpy as np
@@ -371,60 +7,81 @@ from PIL import Image
 # 1. Page Configuration & Styling
 st.set_page_config(page_title="Dog vs Cat AI Detector", page_icon="🐶🐱", layout="centered")
 
+# Custom CSS for Modern UI, Card Layouts & Soft Colors
 st.markdown("""
     <style>
+    /* Main Background & Font */
+    .stApp {
+        background-color: #F8F9FA;
+    }
+    
+    /* Header Styling */
     .main-title {
         text-align: center;
-        color: #FF4B4B;
-        font-size: 2.5rem;
-        font-weight: 700;
+        color: #1E1E2F;
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 0px;
     }
     .sub-text {
         text-align: center;
-        color: #555555;
+        color: #6C757D;
         font-size: 1.1rem;
         margin-bottom: 30px;
+    }
+
+    /* Custom Card Design */
+    .custom-card {
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+    
+    /* Metric Card Customization */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #FF4B4B;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<p class="main-title">🐶🐱 Dog vs Cat AI Classifier</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-text">Powered by Deep Learning & Transfer Learning (MobileNetV2)</p>', unsafe_allow_html=True)
+# App Header Section
+st.markdown('<p class="main-title">🐾 Pet Classifier AI</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-text">Experience High-Accuracy Deep Learning (MobileNetV2)</p>', unsafe_allow_html=True)
 
 # 2. Load the trained model (Cached)
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model('dog_cat_model.keras')
 
-with st.spinner("🔄 Loading AI Model... Please wait..."):
+with st.spinner("🔄 Initializing AI Engine... Please wait..."):
     model = load_model()
 
-# 3. Sidebar Navigation
-st.sidebar.header("⚙️ Settings & Options")
-option = st.sidebar.radio("Choose Input Mode:", ("📤 Upload an Image", "📸 Take a Live Photo"))
+# 3. Sidebar Navigation with Clean Styling
+st.sidebar.markdown("### ⚙️ Navigation Panel")
+option = st.sidebar.radio("Select Input Mode:", ("📤 Upload an Image", "📸 Take a Live Photo"))
 
 image_to_analyze = None
 
 if option == "📤 Upload an Image":
-    st.subheader("Upload a Picture")
-    uploaded_file = st.file_uploader("Choose a picture...", type=["jpg", "jpeg", "png", "webp", "heic"])
+    st.markdown("#### 📁 Upload Pet Picture")
+    uploaded_file = st.file_uploader("Choose a high-resolution image...", type=["jpg", "jpeg", "png", "webp", "heic"])
     
     if uploaded_file is not None:
         try:
             img_raw = Image.open(uploaded_file)
             img_raw = img_raw.convert('RGB')
-            
-            # 💡 THE MAGIC FIX FOR MOBILE: Resize massive phone images instantly 
-            # to prevent Cloud RAM crash (keeps aspect ratio)
             img_raw.thumbnail((400, 400))
             image_to_analyze = img_raw
-            
         except Exception as e:
             st.error(f"⚠️ Could not read image. Error: {e}")
 
 elif option == "📸 Take a Live Photo":
-    st.subheader("Live Camera Capture")
-    camera_photo = st.camera_input("Take a live picture")
+    st.markdown("#### 📷 Live Camera Capture")
+    camera_photo = st.camera_input("Capture pet photo directly")
     if camera_photo is not None:
         try:
             img_raw = Image.open(camera_photo)
@@ -434,42 +91,43 @@ elif option == "📸 Take a Live Photo":
         except Exception as e:
             st.error(f"⚠️ Error reading camera photo.")
 
-# 4. Display & Analyze
+# 4. Display & Modern Results Dashboard
 if image_to_analyze is not None:
-    col1, col2 = st.columns(2)
+    st.markdown("---")
+    col1, col2 = st.columns(2, gap="medium")
     
     with col1:
-    
-        st.image(image_to_analyze, caption='Processed Image', width='stretch')
+        st.markdown("**🖼️ Preview Image**")
+        st.image(image_to_analyze, use_column_width=True)
         
     with col2:
-        st.info("🧠 AI Analysis in progress...")
-        
-        temp_path = "temp_image.jpg"
-        image_to_analyze.save(temp_path, "JPEG")
+        st.markdown("**📊 Analysis Result**")
+        with st.spinner("🧠 Analyzing features..."):
+            temp_path = "temp_image.jpg"
+            image_to_analyze.save(temp_path, "JPEG")
 
-        img = tf.keras.utils.load_img(temp_path, target_size=(150, 150))
-        img_array = tf.keras.utils.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)
+            img = tf.keras.utils.load_img(temp_path, target_size=(150, 150))
+            img_array = tf.keras.utils.img_to_array(img)
+            img_array = tf.expand_dims(img_array, 0)
 
-        # Make Prediction
-        predictions = model.predict(img_array)
-        score = tf.nn.softmax(predictions[0])
+            # Prediction
+            predictions = model.predict(img_array)
+            score = tf.nn.softmax(predictions[0])
 
-        class_names = ['Cat 🐱', 'Dog 🐶']
-        predicted_class = class_names[np.argmax(score)]
-        confidence = 100 * np.max(score)
+            class_names = ['Cat 🐱', 'Dog 🐶']
+            predicted_class = class_names[np.argmax(score)]
+            confidence = 100 * np.max(score)
 
-        st.markdown("---")
+        # UI Result Box Styling
         if "Cat" in predicted_class:
-            st.success(f"### Prediction: **{predicted_class}**")
+            st.success(f"### Result: **{predicted_class}**")
         else:
-            st.warning(f"### Prediction: **{predicted_class}**")
+            st.warning(f"### Result: **{predicted_class}**")
             
-        st.metric(label="Confidence Level", value=f"{confidence:.2f}%")
+        st.metric(label="Prediction Confidence", value=f"{confidence:.2f}%")
 
         if os.path.exists(temp_path):
             os.remove(temp_path)
 else:
     st.markdown("---")
-    st.warning("👉 Please upload an image or take a photo from the sidebar to get started!")
+    st.info("💡 **Tip:** Use the sidebar menu to upload an image from your device or take a live photo to start the AI analysis!")
